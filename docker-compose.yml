@@ -1,0 +1,83 @@
+version: '3.1'
+
+services:
+
+  # nginx:
+  #   build: ./env/nginx
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #   extra_hosts:
+  #     - "host.docker.internal:host-gateway"
+  gateway-service:
+    image: node:20-alpine
+    command: sh -c "npm run build:live"
+    ports:
+      - 4000:4000
+    working_dir: /app
+    volumes:
+      - ./gateway-service:/app:rw
+    depends_on:
+      - "nats-dev"
+      - "mongo-dev"
+    env_file:
+      - .env-dev
+
+  users-service:
+    image: node:20-alpine
+    command: sh -c "npm run build:live"
+    working_dir: /app
+    volumes:
+      - ./users-service:/app:rw
+    depends_on:
+      - "nats-dev"
+      - "mongo-dev"
+    env_file:
+      - .env-dev
+
+  jwt-accesstoken-service:
+    image: node:20-alpine
+    command: sh -c "npm run build:live"
+    working_dir: /app
+    volumes:
+      - ./jwt-accesstoken-service:/app:rw
+    depends_on:
+      - "nats-dev"
+      - "mongo-dev"
+    env_file:
+      - .env-dev
+
+  nats-dev:
+    image: nats:latest
+    restart: always
+    ports:
+      - 4222:4222
+    depends_on:
+      - "mongo-dev"
+
+  # db:
+  #   image: mariadb
+  #   restart: always
+  #   environment:
+  #     MARIADB_ROOT_PASSWORD: superSecret123
+  #   ports:
+  #     - 3306:3306
+
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
+
+  mongo-dev:
+    image: mongo:4.4.10
+    restart: always
+    env_file:
+      - .env-dev
+    ports:
+      - 27017:27017
+    volumes:
+      - ./dev/mongodb/mongo-entrypoint/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ./dev/mongodb/data/db:/data/db
+    logging:
+      driver: none

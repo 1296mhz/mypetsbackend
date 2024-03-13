@@ -1,0 +1,10 @@
+# Use this
+version: '3.1'
+
+services:
+
+  nats:
+    image: nats:latest
+    restart: always
+    ports:
+      - 4222:4222
