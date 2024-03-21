@@ -23,12 +23,36 @@ services:
     env_file:
       - .env-dev
 
+  files-service:
+    image: node:20-alpine
+    command: sh -c "npm run build:live"
+    working_dir: /app
+    volumes:
+      - ./files-service:/app:rw
+    depends_on:
+      - "nats-dev"
+      - "mongo-dev"
+    env_file:
+      - .env-dev
+
   users-service:
     image: node:20-alpine
     command: sh -c "npm run build:live"
     working_dir: /app
     volumes:
       - ./users-service:/app:rw
+    depends_on:
+      - "nats-dev"
+      - "mongo-dev"
+    env_file:
+      - .env-dev
+
+  districts-service:
+    image: node:20-alpine
+    command: sh -c "npm run build:live"
+    working_dir: /app
+    volumes:
+      - ./districts-service:/app:rw
     depends_on:
       - "nats-dev"
       - "mongo-dev"
