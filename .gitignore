@@ -4,3 +4,5 @@ dev/mongodb/data/
 gateway-service/node_modules/
 jwt-accesstoken-service/node_modules/
 users-service/node_modules/
+file-service/node_modules/
+public/

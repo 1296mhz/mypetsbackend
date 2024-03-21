@@ -17,6 +17,7 @@ services:
     working_dir: /app
     volumes:
       - ./gateway-service:/app:rw
+      - ./public:/app/public:rw
     depends_on:
       - "nats-dev"
       - "mongo-dev"
@@ -29,6 +30,7 @@ services:
     working_dir: /app
     volumes:
       - ./files-service:/app:rw
+      - ./public:/app/public:rw
     depends_on:
       - "nats-dev"
       - "mongo-dev"
