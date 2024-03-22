@@ -64,14 +64,24 @@ class FilesService extends MoleculerService {
     return new this.Promise(async (resolve, reject) => {
       //reject(new Error("Disk out of space"));
 
-      try {
-        await fs.promises.access(`${uploadDir}/${ctx.meta.user.userId._id}`);
-      } catch (error) {
-        await fsPromises.mkdir(`${uploadDir}/${ctx.meta.user.userId._id}`);
-      }
-      // const user: any = await ctx.call("users.get", { id: ctx.meta.user.userId._id });
-      // console.log(user)
-      const filePath = path.join(`${uploadDir}/${ctx.meta.user.userId._id}`, 'district.png');
+      // try {
+      //   await fs.promises.access(`${uploadDir}/${ctx.meta.fieldname}`);
+      // } catch (error) {
+      //   await fsPromises.mkdir(`${uploadDir}/${ctx.meta.fieldname}`);
+      // }
+
+      const district: any = await ctx.call("districts.get", { id: ctx.meta.fieldname });
+      // console.log(district)
+      // const mutateDistrict = {
+      //   ...district,
+      //   avatar: `/update/${ctx.meta.fieldname}/district.png`
+      // }
+      // console.log(mutateDistrict)
+      const updatedDistrict: any = await ctx.call("districts.update", 
+      { id: ctx.meta.fieldname, ...district, avatar: `/upload/district_${ctx.meta.fieldname}.png`}
+      );
+      //console.log(ctx.meta.fieldname)
+      const filePath = path.join(`${uploadDir}`, `district_${ctx.meta.fieldname}.png`);
       const f = fs.createWriteStream(filePath);
       f.on("close", () => {
         // File written successfully

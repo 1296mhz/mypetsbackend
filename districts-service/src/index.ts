@@ -3,7 +3,7 @@ import {Service, Action, Event, Method} from 'moleculer-decorators';
 import MongooseAdapter from 'moleculer-db-adapter-mongoose';
 import mongoose from 'mongoose';
 import DbService from 'moleculer-db';
-import NotFoundError from './CustomErrors/NotFoundError';
+// import NotFoundError from './CustomErrors/NotFoundError';
 require('dotenv')
 //.config({path: `.env.${process.env.NODE_ENV}`});
 
@@ -34,7 +34,7 @@ const settingsCreateService = {
     name: String,
     avatar: {
       type: String,
-      default: '/uploads/district.png'
+      default: '/upload/district.png'
     },
     rating: {
       type: Number,
