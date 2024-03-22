@@ -2,10 +2,13 @@ import {ServiceBroker, Service as MoleculerService} from 'moleculer';
 import {Service, Action, Event, Method} from 'moleculer-decorators';
 // import multer from 'multer';
 const fs = require("fs");
+const fsPromises = require("fs").promises
+const {access} = require('node:fs/promises');
 const path = require("path");
 const mkdir = require("mkdirp").sync;
 const mime = require("mime-types");
 const uploadDir = path.join(process.cwd(), "./public/uploads");
+const {constants} = require('fs');
 mkdir(uploadDir);
 // const storage = multer.diskStorage({
 //   destination: './public/data/uploads/',
@@ -57,22 +60,28 @@ const settingsCreateService = {
 class FilesService extends MoleculerService {
   @Action()
   async save(ctx: any) {
-    this.logger.info("Received upload meta:", ctx.meta);
-    return new this.Promise((resolve, reject) => {
+    this.logger.info("Received upload meta:", ctx.meta.user.userId._id);
+    return new this.Promise(async (resolve, reject) => {
       //reject(new Error("Disk out of space"));
-      const filePath = path.join(uploadDir, ctx.meta.filename || this.randomName());
+
+      try {
+        await fs.promises.access(`${uploadDir}/${ctx.meta.user.userId._id}`);
+      } catch (error) {
+        await fsPromises.mkdir(`${uploadDir}/${ctx.meta.user.userId._id}`);
+      }
+      // const user: any = await ctx.call("users.get", { id: ctx.meta.user.userId._id });
+      // console.log(user)
+      const filePath = path.join(`${uploadDir}/${ctx.meta.user.userId._id}`, 'district.png');
       const f = fs.createWriteStream(filePath);
       f.on("close", () => {
         // File written successfully
         this.logger.info(`Uploaded file stored in '${filePath}'`);
-        resolve({ filePath, meta: ctx.meta });
+        resolve({filePath, meta: ctx.meta});
       });
 
       ctx.params.on("error", (err: any) => {
         this.logger.info("File error received", err.message);
         reject(err);
-
-        // Destroy the local file
         f.destroy(err);
       });
 
@@ -83,12 +92,6 @@ class FilesService extends MoleculerService {
 
       ctx.params.pipe(f);
     });
-    // upload.single('file')
-      // return Promise.resolve({
-      //   status: 'created',
-      // });
-    
-    // throw new NotFoundError("User Found", "USER_FOUND");
   }
 
   @Method
