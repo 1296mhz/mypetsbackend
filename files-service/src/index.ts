@@ -70,21 +70,14 @@ class FilesService extends MoleculerService {
       //   await fsPromises.mkdir(`${uploadDir}/${ctx.meta.fieldname}`);
       // }
 
-      const district: any = await ctx.call("districts.get", { id: ctx.meta.fieldname });
-      // console.log(district)
-      // const mutateDistrict = {
-      //   ...district,
-      //   avatar: `/update/${ctx.meta.fieldname}/district.png`
-      // }
-      // console.log(mutateDistrict)
-      const updatedDistrict: any = await ctx.call("districts.update", 
-      { id: ctx.meta.fieldname, ...district, avatar: `/upload/district_${ctx.meta.fieldname}.png`}
+      const district: any = await ctx.call("districts.get", {id: ctx.meta.fieldname});
+
+      const updatedDistrict: any = await ctx.call("districts.update",
+        {id: ctx.meta.fieldname, ...district, avatar: `/upload/district_${ctx.meta.fieldname}.png`}
       );
-      //console.log(ctx.meta.fieldname)
       const filePath = path.join(`${uploadDir}`, `district_${ctx.meta.fieldname}.png`);
       const f = fs.createWriteStream(filePath);
       f.on("close", () => {
-        // File written successfully
         this.logger.info(`Uploaded file stored in '${filePath}'`);
         resolve({filePath, meta: ctx.meta});
       });
