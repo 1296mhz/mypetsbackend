@@ -61,6 +61,18 @@ services:
     env_file:
       - .env-dev
 
+  points-service:
+    image: node:20-alpine
+    command: sh -c "npm run build:live"
+    working_dir: /app
+    volumes:
+      - ./points-service:/app:rw
+    depends_on:
+      - "nats-dev"
+      - "mongo-dev"
+    env_file:
+      - .env-dev
+
   jwt-accesstoken-service:
     image: node:20-alpine
     command: sh -c "npm run build:live"

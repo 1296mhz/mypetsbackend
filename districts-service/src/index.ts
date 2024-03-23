@@ -22,9 +22,7 @@ const settingsCreateService = {
   settings: {
     fields: ["_id", "name", "avatar", "rating", "description", "inTheTrashCan"],
     entityValidator: {
-      // avatar: "string",
       name: "string",
-      inTheTrashCan: "boolean",
       rating: "number",
       description: "string",
     }
