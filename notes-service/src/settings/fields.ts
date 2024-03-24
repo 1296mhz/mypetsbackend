@@ -11,7 +11,7 @@ const fields = [
   "employee",
   "paperAct",
   "electronicAct",
-  "note",
+  "notes",
   "rating",
   "active",
   "maintain",

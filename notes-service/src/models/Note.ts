@@ -2,30 +2,17 @@ import mongoose from 'mongoose';
 import {Schema} from 'mongoose';
 
 const schema = new mongoose.Schema({
-  avatar: {
-    type: String,
-    default: '/upload/district.png'
-  },
-  orgName: String,
-  codeOfObject: {
-    type: String,
-    unique: true
-  },
-  description: String,
-  address: String,
-  sim: String,
-  district: {
+  // files: [
+  //   {
+  //     type: Schema.Types.ObjectId,
+  //     ref: 'District'
+  //   }
+  // ]
+  owner: {
     type: Schema.Types.ObjectId,
-    ref: 'District'
+    ref: 'Point'
   },
-  fireSafetyOfficer: String,
-  employee: String,
-  paperAct: String,
-  electronicAct: String,
-  note: String,
-  rating: Number,
-  active: Boolean,
-  maintain: Boolean,
+  value: String,
   inTheTrashCan: {
     type: Boolean,
     default: false
@@ -45,8 +32,7 @@ schema.index(
     "address": "text",
     "sim": "text",
     "fireSafetyOfficer": "text",
-    "employee": "text",
-    "note": "text"
+    "employee": "text"
   });
 const Point = mongoose.model("Point", schema);
 export default Point;
