@@ -1,11 +1,11 @@
 import {ServiceBroker, Service as MoleculerService} from 'moleculer';
-import {Service, Action, Event, Method} from 'moleculer-decorators';
+import {Service} from 'moleculer-decorators';
 import MongooseAdapter from 'moleculer-db-adapter-mongoose';
-import mongoose from 'mongoose';
+import DistrictModel from './models/District';
+import fields from './settings/fields';
+import entityValidator from './settings/entityValidator';
 import DbService from 'moleculer-db';
-// import NotFoundError from './CustomErrors/NotFoundError';
 require('dotenv')
-//.config({path: `.env.${process.env.NODE_ENV}`});
 
 const MONGODB_URL = process.env.MONGODB_URL;
 const settingsServiceBroker = {
@@ -20,51 +20,15 @@ const settingsCreateService = {
   name: "districts",
   mixins: [DbService],
   settings: {
-    fields: ["_id", "name", "avatar", "rating", "description", "inTheTrashCan"],
-    entityValidator: {
-      name: "string",
-      rating: "number",
-      description: "string",
-    }
+    fields: fields,
+    entityValidator: entityValidator
   },
   adapter: new MongooseAdapter(MONGODB_URL as string),
-  model: mongoose.model("District", new mongoose.Schema({
-    name: String,
-    avatar: {
-      type: String,
-      default: '/upload/district.png'
-    },
-    rating: {
-      type: Number,
-      default: 0
-    },
-    description: String,
-    inTheTrashCan: {
-      type: Boolean,
-      default: false
-    }
-  }, {
-    timestamps: {
-      createdAt: 'createdAt',
-      updatedAt: 'updatedAt'
-    }
-  })),
+  model: DistrictModel,
 };
 
 @Service(settingsCreateService)
 class DistrictsService extends MoleculerService {
-
-  started() { // Reserved for moleculer, fired when started
-    console.log("Started!")
-  }
-
-  created() { // Reserved for moleculer, fired when created
-    console.log("Created")
-  }
-
-  stopped() { // Reserved for moleculer, fired when stopped
-    console.log("Stopped")
-  }
 }
 
 broker.createService(DistrictsService);
