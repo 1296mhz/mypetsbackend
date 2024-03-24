@@ -5,4 +5,5 @@ gateway-service/node_modules/
 jwt-accesstoken-service/node_modules/
 users-service/node_modules/
 file-service/node_modules/
+micro-garden-8/node_modules/
 public/
