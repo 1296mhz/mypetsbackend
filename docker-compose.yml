@@ -70,6 +70,20 @@ services:
     depends_on:
       - "nats-dev"
       - "mongo-dev"
+      - "districts-service"
+      - "users-service"
+    env_file:
+      - .env-dev
+
+  notes-service:
+    image: node:20-alpine
+    command: sh -c "npm run build:live"
+    working_dir: /app
+    volumes:
+      - ./notes-service:/app:rw
+    depends_on:
+      - "nats-dev"
+      - "mongo-dev"
     env_file:
       - .env-dev
 

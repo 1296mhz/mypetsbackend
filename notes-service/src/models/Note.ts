@@ -26,13 +26,7 @@ const schema = new mongoose.Schema({
 
 schema.index(
   {
-    "orgName": "text",
-    "description": "text",
-    "codeOfObject": "text",
-    "address": "text",
-    "sim": "text",
-    "fireSafetyOfficer": "text",
-    "employee": "text"
+    "value": "text",
   });
-const Point = mongoose.model("Point", schema);
+const Point = mongoose.model("Note", schema);
 export default Point;
