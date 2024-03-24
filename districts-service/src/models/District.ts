@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const District = mongoose.model("District", new mongoose.Schema({
+const schema = new mongoose.Schema({
   name: String,
   avatar: {
     type: String,
@@ -20,6 +20,9 @@ const District = mongoose.model("District", new mongoose.Schema({
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   }
-}))
+})
 
+schema.index({'name': 'text', 'description': 'text'});
+
+const District = mongoose.model("District", schema)
 export default District;

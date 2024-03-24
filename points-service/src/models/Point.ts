@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import {Schema} from 'mongoose';
 
-const Point = mongoose.model("Point", new mongoose.Schema({
+const schema = new mongoose.Schema({
   avatar: {
     type: String,
     default: '/upload/district.png'
@@ -35,6 +35,17 @@ const Point = mongoose.model("Point", new mongoose.Schema({
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   }
-}));
+});
 
+schema.index(
+  {
+    "orgName": "text",
+    "description": "text",
+    "codeOfObject": "text",
+    "address": "text",
+    "sim": "text",
+    "fireSafetyOfficer": "text",
+    "employee": "text"
+  });
+const Point = mongoose.model("Point", schema);
 export default Point;
